@@ -1,0 +1,6 @@
+module Pods_YEMNAK [system] {
+  umbrella header "Pods-YEMNAK-umbrella.h"
+
+  export *
+  module * { export * }
+}
