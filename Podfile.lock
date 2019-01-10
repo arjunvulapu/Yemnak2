@@ -1,13 +1,36 @@
 PODS:
   - ActionSheetPicker-3.0 (2.3.0)
+  - BFRImageViewer (1.2.3):
+    - PINRemoteImage (~> 3.0.0-beta.12)
+  - FLAnimatedImage (1.0.12)
   - IQKeyboardManager (6.2.0)
   - JVFloatLabeledTextField (1.2.1)
-  - OneSignal (2.9.2)
+  - OneSignal (2.9.4)
+  - PINCache (3.0.1-beta.6):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.6)
+    - PINCache/Core (= 3.0.1-beta.6)
+  - PINCache/Arc-exception-safe (3.0.1-beta.6):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.6):
+    - PINOperation (~> 1.1.0)
+  - PINOperation (1.1.1)
+  - PINRemoteImage (3.0.0-beta.13):
+    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.13)
+    - PINRemoteImage/PINCache (= 3.0.0-beta.13)
+  - PINRemoteImage/Core (3.0.0-beta.13):
+    - PINOperation
+  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.13):
+    - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
+  - PINRemoteImage/PINCache (3.0.0-beta.13):
+    - PINCache (= 3.0.1-beta.6)
+    - PINRemoteImage/Core
   - SWRevealViewController (2.3.0)
   - ZHPopupView (0.1.1)
 
 DEPENDENCIES:
   - ActionSheetPicker-3.0
+  - BFRImageViewer
   - IQKeyboardManager
   - JVFloatLabeledTextField
   - OneSignal (< 3.0, >= 2.6.2)
@@ -15,22 +38,32 @@ DEPENDENCIES:
   - ZHPopupView
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - ActionSheetPicker-3.0
+    - BFRImageViewer
+    - FLAnimatedImage
     - IQKeyboardManager
     - JVFloatLabeledTextField
     - OneSignal
+    - PINCache
+    - PINOperation
+    - PINRemoteImage
     - SWRevealViewController
     - ZHPopupView
 
 SPEC CHECKSUMS:
   ActionSheetPicker-3.0: eef157d75e151f255c5333d26656c7fbfe905a51
+  BFRImageViewer: 647b91e4c9956d1ffc66245614aca22f10b0d370
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
   JVFloatLabeledTextField: cfc44e3c4d493b2ed92ede8035e8e89c2912ba64
-  OneSignal: e00b18be0a81e6e2009d27873c76a6153e5551fe
+  OneSignal: a41f5a896177275662da07e23d6a809c0e105a89
+  PINCache: d195fdba255283f7e9900a55e3cced377f431f9b
+  PINOperation: a6219e6fc9db9c269eb7a7b871ac193bcf400aac
+  PINRemoteImage: d6d51c5d2adda55f1ce30c96e850b6c4ebd2856a
   SWRevealViewController: 6d3fd97f70112fd7cef9de14df4260eacce4c63a
   ZHPopupView: cb3bedde775803c2c51e3db05cdd07ac6efaaaeb
 
-PODFILE CHECKSUM: 3df358e3c121f78345e10a412fd0858ccf50d208
+PODFILE CHECKSUM: cd7b1bb5768e76c5122d9600d26d5918781286fb
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.6.0.beta.2
