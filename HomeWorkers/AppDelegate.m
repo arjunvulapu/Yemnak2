@@ -10,6 +10,7 @@
 #import "Utils.h"
 #import "Common.h"
 #import <OneSignal/OneSignal.h>
+#import <IQKeyboardManager.h>
 @interface UIFont (SystemFontOverride)
 @end
 @implementation UIFont (SystemFontOverride)
@@ -89,7 +90,7 @@
     [[UITextView appearance] setTextContainerInset:UIEdgeInsetsZero];
     [UITextView appearance].textContainer.lineFragmentPadding = 0;
     [self downloadStringsFile];
-    [self downloadSettings];
+   
     // Override point for customization after application launch.
     if ([[Utils getLanguage] isEqualToString:KEY_LANGUAGE_AR]) {
         [[UILabel appearance] setSubstituteFontName:@"Hacen Tunisia Lt"];
@@ -151,7 +152,12 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 - (void)downloadStringsFile {
+    if (![Utils isOnline]) {
+        [Utils showErrorAlertWithMessage:[MCLocalization stringForKey:@"internet_error"]];
+        return;
+    }
     NSData *data2 = [NSData dataWithContentsOfURL:[Utils createURLForPage:WORDS withParameters:@{}]];
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data2 options:NSJSONReadingMutableContainers error:nil];
     NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -166,8 +172,13 @@
         [[MCLocalization sharedInstance] setLanguage:[Utils getLanguage]];
         [[MCLocalization sharedInstance] reloadStrings];
     }
+     [self downloadSettings];
 }
 - (void)downloadSettings {
+    if (![Utils isOnline]) {
+        [Utils showErrorAlertWithMessage:[MCLocalization stringForKey:@"internet_error"]];
+        return;
+    }
     NSData *data2 = [NSData dataWithContentsOfURL:[Utils createURLForPage:SETTINGS withParameters:@{}]];
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data2 options:NSJSONReadingMutableContainers error:nil];
 //    [[NSUserDefaults standardUserDefaults] setValue:dictionary forKey:@"SETTINGS"];
@@ -176,8 +187,10 @@
     NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dictionary];
     [currentDefaults setObject:data forKey:@"SETTINGS"];
+    
 }
 - (void)reloadUIForLanguageChange {
+    
 //    [[UINavigationBar appearance] setBarTintColor: [UIColor colorWithRed:29/255.0f green:42/255.0f blue:56/255.0f alpha:1]];
 //    
 //    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
@@ -210,5 +223,30 @@
         
     }
     
+}
+
+
+-(void)setToStart{
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    UIViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+
+    self.window.rootViewController = homeNavigationController;
+    [self.window makeKeyAndVisible];
+}
+
+-(void)setToSettings{
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    UIViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    
+    self.window.rootViewController = homeNavigationController;
+    [self.window makeKeyAndVisible];
 }
 @end

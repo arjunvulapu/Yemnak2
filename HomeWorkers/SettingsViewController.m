@@ -16,6 +16,7 @@
 #import <MessageUI/MessageUI.h>
 #import "CorporateRequestsListViewController.h"
 #import "ForgetPasswordViewController.h"
+#import "ContactUsViewController.h"
 @interface SettingsViewController ()
 {
     UIButton *buttonUser;
@@ -53,13 +54,14 @@
     mysettings = [NSMutableArray arrayWithObjects:
                   Localized(@"Home Worker Requests"),
                   Localized(@"Available Home Workers"),
-                  Localized(@"Part Time Request"),
+                  Localized(@"Part Time Request"), Localized(@"Corporate Request"),
+                  Localized(@"Employee Requests"),
                nil];
 
-    support = [NSMutableArray arrayWithObjects:                  Localized(@"Corporate Request"),
-               Localized(@"Employee Requests"), nil];
+//    support = [NSMutableArray arrayWithObjects:                  Localized(@"Corporate Request"),
+//               Localized(@"Employee Requests"), nil];
     //headers = [NSMutableArray arrayWithObjects:Localized(@"LANGUAGE"),Localized(@"MY SETTINGS"), Localized(@"SUPPORT"),Localized(@"CONTACT US"),nil];
-    headers = [NSMutableArray arrayWithObjects:Localized(@"LANGUAGE"),Localized(@"HOME WORKERS"),Localized(@"CORPORATE"),nil];
+    headers = [NSMutableArray arrayWithObjects:Localized(@"LANGUAGE"),Localized(@"YOUR REQUESTS"),Localized(@"CORPORATE"),nil];
 
     [self.editProfileBtn setTitle:Localized(@"Edit Profile") forState:UIControlStateNormal];
     [self.myOrderBtn setTitle:Localized(@"My Orders") forState:UIControlStateNormal];
@@ -141,30 +143,31 @@
     }
     
     [APP_DELEGATE reloadUIForLanguageChange];
-    
-    NSArray *windows = [UIApplication sharedApplication].windows;
-    for (UIWindow *window in windows) {
-        for (UIView *view in window.subviews) {
-            [view removeFromSuperview];
-            [window addSubview:view];
-        }
-    }
-    
-    
-    
+
+//    NSArray *windows = [UIApplication sharedApplication].windows;
+//    for (UIWindow *window in windows) {
+//        for (UIView *view in window.subviews) {
+//            [view removeFromSuperview];
+//            [window addSubview:view];
+//        }
+//    }
+
+    [APP_DELEGATE setToStart];
+
+
     
     
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return headers.count;    //count of section
+    return 1;    //count of section
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if(section==0){
-        return 2;
+        return 3;
     }else if(section==1){
         return mysettings.count;
     }else if(section==2){
@@ -211,20 +214,38 @@
         };
         
         return cell;
-        }else{
+        }else  if(indexPath.row==1){
             SettingsTableViewCell *cell = [self.settingsTableView dequeueReusableCellWithIdentifier:@"SettingsTableViewCell"] ;
             if ([[Utils getLanguage] isEqualToString:KEY_LANGUAGE_AR]) {
                 [cell.pbutton setImage:[UIImage imageNamed:@"previous"] forState:UIControlStateNormal];
-                cell.pName.text=Localized(@"Forgot Password");
+                cell.pName.text=Localized(@"Contact Us");
                 
             }else{
                 [cell.pbutton setImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
-                cell.pName.text=Localized(@"Forgot Password");
+                cell.pName.text=Localized(@"Contact Us");
                 
             }
             cell.btnAction = ^{
-                ForgetPasswordViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"ForgetPasswordViewController"];
+                ContactUsViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"ContactUsViewController"];
                 [self.navigationController pushViewController:vc animated:YES];
+            };
+            
+            return cell;
+        }else  {
+            SettingsTableViewCell *cell = [self.settingsTableView dequeueReusableCellWithIdentifier:@"SettingsTableViewCell"] ;
+            if ([[Utils getLanguage] isEqualToString:KEY_LANGUAGE_AR]) {
+                [cell.pbutton setImage:[UIImage imageNamed:@"previous"] forState:UIControlStateNormal];
+                cell.pName.text=Localized(@"YOUR REQUESTS");
+                
+            }else{
+                [cell.pbutton setImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
+                cell.pName.text=Localized(@"YOUR REQUESTS");
+                
+            }
+            cell.btnAction = ^{
+                CorporateRequestsListViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CorporateRequestsListViewController"];
+                controller.from = @"10";
+                [self.navigationController pushViewController:controller animated:YES];
             };
             
             return cell;
@@ -357,15 +378,18 @@
             [[MCLocalization sharedInstance] setLanguage:KEY_LANGUAGE_AR];
                     }
         [APP_DELEGATE reloadUIForLanguageChange];
-        NSArray *windows = [UIApplication sharedApplication].windows;
-        for (UIWindow *window in windows) {
-            for (UIView *view in window.subviews) {
-                [view removeFromSuperview];
-                [window addSubview:view];
-            }
-        }
+            [APP_DELEGATE setToStart];
         _settingsTableView.reloadData;
-        }else{
+        }
+        else if(indexPath.row==1){
+            ContactUsViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"ContactUsViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
+        }else if(indexPath.row==2){
+        CorporateRequestsListViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CorporateRequestsListViewController"];
+        controller.from = @"10";
+        [self.navigationController pushViewController:controller animated:YES];
+        }
+        else{
             ForgetPasswordViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"ForgetPasswordViewController"];
             [self.navigationController pushViewController:vc animated:YES];
         }
@@ -382,6 +406,14 @@
         }else if(indexPath.row==2){
             CorporateRequestsListViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CorporateRequestsListViewController"];
             controller.from = @"12";
+            [self.navigationController pushViewController:controller animated:YES];
+        }if(indexPath.row==3){
+            CorporateRequestsListViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CorporateRequestsListViewController"];
+            controller.from = @"20";
+            [self.navigationController pushViewController:controller animated:YES];
+        }else if(indexPath.row==4){
+            CorporateRequestsListViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"CorporateRequestsListViewController"];
+            controller.from = @"21";
             [self.navigationController pushViewController:controller animated:YES];
         }
     }else

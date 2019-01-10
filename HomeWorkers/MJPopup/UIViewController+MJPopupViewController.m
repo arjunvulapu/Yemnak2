@@ -139,8 +139,8 @@ static void * const keypath = (void*)&keypath;
     popupView.alpha = 0.0f;
     [overlayView addSubview:popupView];
     [sourceView addSubview:overlayView];
-    
-    [dismissButton addTarget:self action:@selector(dismissPopupViewControllerWithanimation:) forControlEvents:UIControlEventTouchUpInside];
+    // to close the popup even touches outside of the popup
+    //[dismissButton addTarget:self action:@selector(dismissPopupViewControllerWithanimation:) forControlEvents:UIControlEventTouchUpInside];
     switch (animationType) {
         case MJPopupViewAnimationSlideBottomTop:
         case MJPopupViewAnimationSlideBottomBottom:

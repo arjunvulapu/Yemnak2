@@ -61,7 +61,7 @@
     self.registerSubmitBtn.backgroundColor = BUTTON_BG_COLOR;
 
     
-self.firstNameLbl.text=Localized(@"First Name");
+    self.firstNameLbl.text=Localized(@"First Name");
     self.lastNameLbl.text=Localized(@"Last Name");
     self.registerEmailAddressLbl.text=Localized(@"Email Address");
     self.registerPasswordLbl.text=Localized(@"Password");

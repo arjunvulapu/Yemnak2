@@ -40,13 +40,17 @@
 - (IBAction)femaleBtnAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *maleLbl;
 @property (weak, nonatomic) IBOutlet UILabel *femaleLbl;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *resetBtn;
+@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 - (IBAction)resetBtnAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextField *toAgeTxtField;
+- (IBAction)toAgeBtnAction:(id)sender;
 
 
 @property (strong,nonatomic) NSString *From;
 
 @property (assign,nonatomic) NSString *ages;
+@property (assign,nonatomic) NSString *toAges;
+
 @property (assign,nonatomic) NSDictionary *nationality;
 @property (assign,nonatomic) NSDictionary *religion;
 @property (assign,nonatomic) NSString *gender;

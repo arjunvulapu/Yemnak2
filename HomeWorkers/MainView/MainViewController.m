@@ -46,7 +46,8 @@
     
     // Do any additional setup after loading the view.
     [self addtolayerTO:self.contactUsBtn];
-    [self addtolayerTO:self.aboutUsBtn];[self addtolayerTO:self.settingsBtn];
+    [self addtolayerTO:self.aboutUsBtn];
+    //[self addtolayerTO:self.settingsBtn];
     [self customSetup];
     [APP_DELEGATE reloadUIForLanguageChange];
 
@@ -280,18 +281,18 @@
     UIBarButtonItem *mailbutton =[[UIBarButtonItem alloc] initWithCustomView:workaroundImageView];
     self.navigationItem.rightBarButtonItem=mailbutton;
      self.navigationController.navigationBar.translucent = NO;
-    [self.contactUsBtn setTitle:Localized(@"CONTACT US") forState:UIControlStateNormal];
-    [self.aboutUsBtn setTitle:Localized(@"ABOUT US") forState:UIControlStateNormal];
-    [self.settingsBtn setTitle:Localized(@"SETTINGS") forState:UIControlStateNormal];
+    [self.contactUsBtn setTitle:Localized(@"Request Home Workers") forState:UIControlStateNormal];
+    [self.aboutUsBtn setTitle:Localized(@"Add AvailableWorkers") forState:UIControlStateNormal];
+   // [self.settingsBtn setTitle:Localized(@"SETTINGS") forState:UIControlStateNormal];
     if ([[Utils getLanguage] isEqualToString:KEY_LANGUAGE_AR]) {
-        self.contactUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
-        self.aboutUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
-        self.settingsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
+        //self.contactUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
+       // self.aboutUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
+       // self.settingsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, -8, 0, 0);
 
     }else{
-         self.contactUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
-        self.aboutUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
-        self.settingsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
+        // self.contactUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
+       // self.aboutUsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
+      //  self.settingsBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
     }
     [self setNavigation];
     [self customSetup];
@@ -314,17 +315,17 @@
     }
     
     [APP_DELEGATE reloadUIForLanguageChange];
+
+//    NSArray *windows = [UIApplication sharedApplication].windows;
+//    for (UIWindow *window in windows) {
+//        for (UIView *view in window.subviews) {
+//            [view removeFromSuperview];
+//            [window addSubview:view];
+//        }
+//    }
     
-    NSArray *windows = [UIApplication sharedApplication].windows;
-    for (UIWindow *window in windows) {
-        for (UIView *view in window.subviews) {
-            [view removeFromSuperview];
-            [window addSubview:view];
-        }
-    }
-    
-    
-   
+[APP_DELEGATE setToStart];
+
     _mainTable.reloadData;
     
 }
@@ -356,7 +357,9 @@
     if(indexPath.row==1){
         [cell.addBtn setTitle:Localized(@"Add AvailableWorkers") forState:UIControlStateNormal];
 
-        cell.addBtn.hidden=NO;
+        //cell.addBtn.hidden=NO;
+        cell.addBtn.hidden=YES;
+
         cell.addBtn.layer.cornerRadius = cell.addBtn.frame.size.height/2;
         cell.addBtn.clipsToBounds = YES;
         cell.addBtn.layer.borderWidth = 1.0f;
@@ -383,21 +386,22 @@
 //
 //
 //        }];
-        cell.Add = ^{
-           
-            if([Utils loggedInUserId] != -1){
-                AddAvailableWorkersViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"AddAvailableWorkersViewController"];
-                [self.navigationController pushViewController:vc animated:YES];
-                
-            }else{
-                LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-                [self.navigationController pushViewController:obj animated:YES];
-            }
-        };
+//        cell.Add = ^{
+//
+//            if([Utils loggedInUserId] != -1){
+//                AddAvailableWorkersViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"AddAvailableWorkersViewController"];
+//                [self.navigationController pushViewController:vc animated:YES];
+//
+//            }else{
+//                LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//                [self.navigationController pushViewController:obj animated:YES];
+//            }
+//        };
     }else if(indexPath.row==0){
         [cell.addBtn setTitle:Localized(@"Request Home Workers") forState:UIControlStateNormal];
 
-        cell.addBtn.hidden=NO;
+        //cell.addBtn.hidden=NO;
+         cell.addBtn.hidden=YES;
         cell.addBtn.layer.cornerRadius = cell.addBtn.frame.size.height/2;
         cell.addBtn.clipsToBounds = YES;
         cell.addBtn.layer.borderWidth = 1.0f;
@@ -424,17 +428,17 @@
 //
 //
 //         }];
-        cell.Add = ^{
-            
-            if([Utils loggedInUserId] != -1){
-                HomeWorkersRequestViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"HomeWorkersRequestViewController"];
-                [self.navigationController pushViewController:vc animated:YES];
-                
-            }else{
-                LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-                [self.navigationController pushViewController:obj animated:YES];
-            }
-        };
+//        cell.Add = ^{
+//            
+//            if([Utils loggedInUserId] != -1){
+//                HomeWorkersRequestViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"HomeWorkersRequestViewController"];
+//                [self.navigationController pushViewController:vc animated:YES];
+//                
+//            }else{
+//                LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//                [self.navigationController pushViewController:obj animated:YES];
+//            }
+//        };
     }
     return cell;
 }
@@ -531,8 +535,16 @@
     }
 }
 - (IBAction)contactUsBtnAction:(id)sender {
-    ContactUsViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"ContactUsViewController"];
-    [self.navigationController pushViewController:obj animated:YES];
+//    ContactUsViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"ContactUsViewController"];
+//    [self.navigationController pushViewController:obj animated:YES];
+    if([Utils loggedInUserId] != -1){
+        HomeWorkersRequestViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"HomeWorkersRequestViewController"];
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else{
+        LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        [self.navigationController pushViewController:obj animated:YES];
+    }
     
 }
 
@@ -548,8 +560,16 @@
 }
 
 - (IBAction)aboutUsBtnAction:(id)sender {
-    AboutUsViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"AboutUsViewController"];
-    [self.navigationController pushViewController:obj animated:YES];
+//    AboutUsViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"AboutUsViewController"];
+//    [self.navigationController pushViewController:obj animated:YES];
+    if([Utils loggedInUserId] != -1){
+        AddAvailableWorkersViewController *vc=[self.storyboard instantiateViewControllerWithIdentifier:@"AddAvailableWorkersViewController"];
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }else{
+        LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        [self.navigationController pushViewController:obj animated:YES];
+    }
 }
 - (void)willPresentAlertView:(UIAlertView *)alertView {
     NSLog(@"Show alert");

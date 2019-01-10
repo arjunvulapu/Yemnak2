@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <JVFloatLabeledTextField/JVFloatLabeledTextField.h>
+#import <JVFloatLabeledTextField/JVFloatLabeledTextView.h>
+
 #import "Common.h"
 #import "BaseViewController.h"
 @interface EmployeeRequestViewController : BaseViewController
@@ -53,6 +55,9 @@
 - (IBAction)ageBtnAction:(id)sender;
 @property (weak, nonatomic) IBOutlet JVFloatLabeledTextField *subCategoryTxtField;
 - (IBAction)selectSubcategoryAction:(id)sender;
+@property (weak, nonatomic) IBOutlet JVFloatLabeledTextField *otherSubcategoryTxtField;
+@property (weak, nonatomic) IBOutlet UILabel *otherSubcatLbl;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *numberWorkersTop;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *reqiureDocumentsLbl;
@@ -93,5 +98,10 @@
 @property (strong, nonatomic)  NSMutableDictionary *details;
 @property (weak, nonatomic) IBOutlet UILabel *serviceChargeLbl;
 @property (weak, nonatomic) IBOutlet UILabel *servicePriceLbl;
+@property (weak, nonatomic) IBOutlet UILabel *bothGenderLbl;
+@property (weak, nonatomic) IBOutlet UIButton *bothGenderBtn;
+- (IBAction)bothGenderBtnAction:(id)sender;
+@property (weak, nonatomic) IBOutlet JVFloatLabeledTextView *addCommentTxtView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end

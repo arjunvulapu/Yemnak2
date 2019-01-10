@@ -26,6 +26,8 @@
     NSDictionary *areaF;
     NSDictionary *religionF;
     NSDictionary *ageF;
+    NSDictionary *toageF;
+
     NSString *genderF;
     
 }
@@ -41,7 +43,7 @@
     _noListLbl.hidden=YES;
     homeWorkers=[[NSMutableArray alloc]init];
      [self makePostCallForPage:HOMEWORKERS withParams:@{} withRequestCode:1001];
-    self.navigationItem.title=Localized(@"Home Workers");
+    self.navigationItem.title=Localized(@"HOME WORKERS");
     // Do any additional setup after loading the view.
     leftbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [leftbutton setBackgroundImage:[UIImage imageNamed:@"button_background_icon.png"] forState:UIControlStateNormal];
@@ -100,7 +102,8 @@
     FilterViewController *vc = [[FilterViewController alloc] initWithNibName:@"FilterViewController" bundle:nil];
     vc.nationality = areaF;
     vc.religion=religionF;
-    vc.age = ageF;
+    vc.ages = ageF;
+    vc.toAges = toageF;
     vc.gender = genderF;
     vc.delegate=self;
     vc.From = @"AW";
@@ -118,12 +121,14 @@
         areaF = nationality;
         religionF = religion;
         ageF = age;
+        toageF=[filtDict valueForKey:@"toage"];
+
         genderF = [filtDict valueForKey:@"gender"];
         
         [self makePostCallForPage:HOMEWORKERS withParams:@{@"nationality": [filtDict valueForKey:@"nationality"],
                                                            @"religion":[filtDict valueForKey:@"religion"],
-                                                           @"age":[filtDict valueForKey:@"age"],
-                                                           @"gender":[filtDict valueForKey:@"gender"]
+                                                           @"fromage":[filtDict valueForKey:@"age"],
+                                                           @"toage":[filtDict valueForKey:@"toage"],                                                           @"gender":[filtDict valueForKey:@"gender"]
                                                            } withRequestCode:1001];
     };
     vc.completionBlockAW = ^(NSMutableDictionary *area,NSDictionary *nationality,NSDictionary *religion,NSString *age) {
@@ -133,9 +138,11 @@
         religionF = religion;
         ageF = [filtDict valueForKey:@"age"];
         genderF = [filtDict valueForKey:@"gender"];
-    
+        toageF=[filtDict valueForKey:@"toage"];
+
         [self makePostCallForPage:HOMEWORKERS withParams:@{@"nationality": [filtDict valueForKey:@"nationality"],
-                                                                @"religion":[filtDict valueForKey:@"religion"],                                                                   @"age":[filtDict valueForKey:@"age"],
+                                                           @"religion":[filtDict valueForKey:@"religion"],                                                                    @"fromage":[filtDict valueForKey:@"age"],
+                                                           @"toage":[filtDict valueForKey:@"toage"], 
                                                                 @"gender":[filtDict valueForKey:@"gender"]
                                                                 } withRequestCode:1001];
         

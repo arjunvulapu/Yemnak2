@@ -30,6 +30,8 @@
     NSDictionary *areaF;
     NSDictionary *religionF;
     NSString *ageF;
+    NSString *toageF;
+
     NSString *genderF;
 }
 @end
@@ -43,7 +45,7 @@
     avWorkers=[[NSMutableArray alloc]init];
      avWorkersCopy=[[NSMutableArray alloc]init];
     [self makePostCallForPage:AVAILABLEWORKERS withParams:@{} withRequestCode:100];
-    self.navigationItem.title=Localized(@"Avaliable Workers");
+    self.navigationItem.title=Localized(@"AVAILABLE WORKERS");
     // Do any additional setup after loading the view.
     leftbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [leftbutton setBackgroundImage:[UIImage imageNamed:@"button_background_icon.png"] forState:UIControlStateNormal];
@@ -189,6 +191,8 @@
     vc.nationality = areaF;
     vc.religion=religionF;
     vc.ages = ageF;
+    vc.toAges = toageF;
+
     vc.gender = genderF;
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
@@ -198,6 +202,7 @@
         areaF = nationality;
         religionF = religion;
         ageF = [filtDict valueForKey:@"age"];
+        toageF=[filtDict valueForKey:@"toage"];
         genderF = [filtDict valueForKey:@"gender"];
 //        [self makePostCallForPage:AVAILABLEWORKERS withParams:@{@"nationality": [filtDict valueForKey:@"nationality"],
 //                                                                    @"religion":[filtDict valueForKey:@"religion"],                                                                    @"salary_from":[filtDict valueForKey:@"MinSal"],
@@ -205,7 +210,8 @@
 //                                                                @"amount":[filtDict valueForKey:@"amount"]
 //                                                                    } withRequestCode:100];
         [self makePostCallForPage:AVAILABLEWORKERS withParams:@{@"nationality": [filtDict valueForKey:@"nationality"],
-                                                                @"religion":[filtDict valueForKey:@"religion"],                                                                   @"age":[filtDict valueForKey:@"age"],
+                                                                @"religion":[filtDict valueForKey:@"religion"],                                                                   @"fromage":[filtDict valueForKey:@"age"],
+                                                                @"toage":[filtDict valueForKey:@"toage"],
                                                                 @"gender":[filtDict valueForKey:@"gender"]
                                                                 } withRequestCode:100];
 

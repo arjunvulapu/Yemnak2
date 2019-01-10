@@ -63,6 +63,13 @@
 //        [self.areas addObject:[Country instanceFromDictionary:dictionary]];
 //    }
     self.areas = array.mutableCopy;
+    if(![_from isEqual:@"filter"]){
+    NSMutableDictionary *dic =[[NSMutableDictionary alloc] init];
+    [dic setValue:@"0" forKey:@"id"];
+    [dic setValue:Localized(@"Other") forKey:@"title"];
+    [dic setValue:Localized(@"Other") forKey:@"title_ar"];
+    [self.areas addObject:dic];
+    }
     [self.tableView reloadData];
 }
 

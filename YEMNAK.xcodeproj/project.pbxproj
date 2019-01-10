@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0908616041E818A7B93535A0 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7463FBF1D2834C1805E2CF0 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		1800B15820EE029F00502F58 /* SelectServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1800B15520EE029E00502F58 /* SelectServiceViewController.xib */; };
 		1800B15920EE029F00502F58 /* SelectServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1800B15620EE029E00502F58 /* SelectServiceViewController.m */; };
 		1815B24020A5C1EC003EC083 /* SettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1815B23F20A5C1EC003EC083 /* SettingsTableViewCell.m */; };
@@ -214,7 +213,8 @@
 		18FCE71520EF5E7D007F2067 /* CorporateRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FCE71420EF5E7D007F2067 /* CorporateRequestViewController.m */; };
 		18FD94B12086221400F47A83 /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD94B02086221400F47A83 /* AboutUsViewController.m */; };
 		18FD94B42086226100F47A83 /* ContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FD94B32086226100F47A83 /* ContactUsViewController.m */; };
-		BA099E31B166556F28339D73 /* libPods-YEMNAK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3949B11693AE5A69B4F30425 /* libPods-YEMNAK.a */; };
+		A98F9F9584B97079833240F7 /* libPods-YEMNAK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3949B11693AE5A69B4F30425 /* libPods-YEMNAK.a */; };
+		DA4295FAE537D2CD7E15119A /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7463FBF1D2834C1805E2CF0 /* libPods-OneSignalNotificationServiceExtension.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -619,7 +619,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0908616041E818A7B93535A0 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				DA4295FAE537D2CD7E15119A /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,7 +627,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA099E31B166556F28339D73 /* libPods-YEMNAK.a in Frameworks */,
+				A98F9F9584B97079833240F7 /* libPods-YEMNAK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1327,8 +1327,8 @@
 				18BA072120845F99002C3DFF /* Sources */,
 				18BA072220845F99002C3DFF /* Frameworks */,
 				18BA072320845F99002C3DFF /* Resources */,
-				45F1B72D6F3BE889E517E7FD /* [CP] Copy Pods Resources */,
 				1838F76021804F1C00BDEF22 /* Embed App Extensions */,
+				B42772970A2984DB72C03940 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1570,22 +1570,34 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		45F1B72D6F3BE889E517E7FD /* [CP] Copy Pods Resources */ = {
+		B42772970A2984DB72C03940 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-YEMNAK/Pods-YEMNAK-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-YEMNAK/Pods-YEMNAK-resources.sh",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/BFRImageViewerLocalizations.bundle",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross.png",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@2x.png",
+				"${PODS_ROOT}/BFRImageViewer/BFRImageViewController/Resources/cross@3x.png",
 				"${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BFRImageViewerLocalizations.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cross@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YEMNAK/Pods-YEMNAK-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YEMNAK/Pods-YEMNAK-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA6BB98A1D221C511BEECDF2 /* [CP] Check Pods Manifest.lock */ = {
@@ -1958,19 +1970,16 @@
 				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Pods/OneSignal\"",
-					"$(PROJECT_DIR)/OneSignal/iOS_SDK/OneSignalSDK/Framework",
 					"$(PROJECT_DIR)",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/IQKeyboardManager\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeWorkers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/IQKeyboardManager\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2001,19 +2010,16 @@
 				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Pods/OneSignal\"",
-					"$(PROJECT_DIR)/OneSignal/iOS_SDK/OneSignalSDK/Framework",
 					"$(PROJECT_DIR)",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/IQKeyboardManager\"",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = HomeWorkers/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/IQKeyboardManager\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2038,7 +2044,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WV96477242;
+				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				INFOPLIST_FILE = HomeWorkersTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = apple.HomeWorkersTests;
@@ -2053,7 +2059,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WV96477242;
+				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				INFOPLIST_FILE = HomeWorkersTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = apple.HomeWorkersTests;
@@ -2067,7 +2073,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WV96477242;
+				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				INFOPLIST_FILE = HomeWorkersUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = apple.HomeWorkersUITests;
@@ -2081,7 +2087,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = WV96477242;
+				DEVELOPMENT_TEAM = Q42M7EFJNS;
 				INFOPLIST_FILE = HomeWorkersUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = apple.HomeWorkersUITests;

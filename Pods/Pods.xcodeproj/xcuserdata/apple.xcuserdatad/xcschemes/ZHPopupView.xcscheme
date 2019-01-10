@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "78EF1EA9F0D0DC2B6BD5A356475299FC"
+               BlueprintIdentifier = "0259AB95EE8E72DED66D704826CCBA7F"
                BlueprintName = "ZHPopupView"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libZHPopupView.a">

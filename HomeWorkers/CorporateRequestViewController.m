@@ -15,6 +15,7 @@
 #import "QuestionsViewController.h"
 #import "PECropViewController.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "LoginViewController.h"
 @interface CorporateRequestViewController ()<PopViewControllerDelegate>
 {
     int i;
@@ -152,6 +153,12 @@
     _to3textField.delegate=self;
     _whenTxtfiled.delegate=self;
     _whenCanyouStartTxtField.delegate=self;
+    _dateOfBirthTxtField.delegate=self;
+    _residencyExpiryDateTxtfield.delegate=self;
+    _dateGraduatedTxtField.delegate=self;
+    _dateGraduated2TxtField.delegate=self;
+    _dateGraduated3TxtField.delegate=self;
+    _dateGraduated4TxtField.delegate=self;
 
    
     
@@ -188,6 +195,10 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backButtonView];
     self.navigationItem.leftBarButtonItem = backButton;
 }
+
+ -(void)textFieldDidBeginEditing:(UITextField *)textField {
+   [datePicker setDate:[NSDate date]];
+ }
 -(void)showSelectedDate{
     
     UIDatePicker *picker = (UIDatePicker*)_dateOfBirthTxtField.inputView;
@@ -349,6 +360,16 @@
      initWithString:Localized(@"Nationality")
      attributes:@{NSForegroundColorAttributeName:placeholderColor}];
     
+    self.otherNationalityTxtField.text=@"";
+
+    self.otherNationalityTxtField.attributedPlaceholder =
+    [[NSAttributedString alloc]
+     initWithString:Localized(@"Other Nationality")
+     attributes:@{NSForegroundColorAttributeName:placeholderColor}];
+    _otherNationalityTxtField.hidden=YES;
+    _otherNationalityLbl.hidden=YES;
+    _residancyTop.constant=13;
+    
     self.residencyExpireDateLbl.text=Localized(@"Residency Expire Date");
     self.residencyExpiryDateTxtfield.text=@"";
     self.residencyExpiryDateTxtfield.attributedPlaceholder =
@@ -411,6 +432,14 @@
     [[NSAttributedString alloc]
      initWithString:Localized(@"Selected SubPost")
      attributes:@{NSForegroundColorAttributeName:placeholderColor}];
+    self.otherSubCategoryTxtFiled.text=@"";
+    self.otherSubCategoryTxtFiled.attributedPlaceholder =
+    [[NSAttributedString alloc]
+     initWithString:Localized(@"Other SubPost")
+     attributes:@{NSForegroundColorAttributeName:placeholderColor}];
+    _whencanYouStartTop.constant=20;
+    _otherSubCategoryLbl.hidden=YES;
+    _otherSubCategoryTxtFiled.hidden=YES;
     self.doyouworkNowLbl.text=Localized(@"Do you work now?");
     self.yesLbl.text=Localized(@"Yes");
     self.noLbl.text=Localized(@"No");
@@ -930,7 +959,15 @@
     
     if(i==4){
         if([self CheckValidation]){
-        [self loadData];
+            if([Utils loggedInUserId] != -1)
+            {
+                [self loadData];
+            }else{
+                //[self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+                LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+                [self.navigationController pushViewController:obj animated:YES];
+            }
+//        [self loadData];
         }
        // [self.navigationController popViewControllerAnimated:YES];
     }else{
@@ -983,6 +1020,8 @@
     [dict setValue:_dateOfBirthTxtField.text forKey:@"date_of_birth"];
     [dict setValue:_placeOfBirthTxtField.text forKey:@"place_of_birth"];
     [dict setValue:_nationlaityTxtField.text forKey:@"nationality"];
+    [dict setValue:_otherNationalityTxtField.text forKey:@"other_nationality"];
+
     [dict setValue:_residencyExpiryDateTxtfield.text forKey:@"residency_expiredate"];
     [dict setValue:_articalNumberTxtfield.text forKey:@"article_number"];
     [dict setValue:_addressTextField.text forKey:@"address"];
@@ -991,9 +1030,10 @@
     [dict setValue:_emailTxtField.text forKey:@"email"];
     [dict setValue:[SelectedPost valueForKey:@"id"] forKey:@"position_applied_for"];
     [dict setValue:[SelectedSubPost valueForKey:@"id"] forKey:@"subposition_applied_for"];
+    [dict setValue:_otherSubCategoryTxtFiled.text forKey:@"other_subposition_applied_for"];
 
     [dict setValue: doYouWorkNow? @"YES": @"NO" forKey:@"do_you_work_now"];
-    [dict setValue:_whenTxtfiled.text forKey:@"when_can_youstart"];
+    [dict setValue:_whenCanyouStartTxtField.text forKey:@"when_can_youstart"];
     [dict setValue:_expectedSalaryTxtField.text forKey:@"expected_salary"];
     [dict setValue:_maritalStatusTxtField.text forKey:@"marital_status"];
     
@@ -1086,7 +1126,7 @@
     [empDict3 setValue:_nameofemployer3TxtField.text forKey:@"employer"];
     [empDict3 setValue:_lastPosition3TxtField.text forKey:@"last_position"];
     [empDict3 setValue:_from3TxtField.text forKey:@"from"];
-    [empDict3 setValue:_to3textField.text forKey:@"to_third"];
+    [empDict3 setValue:_to3textField.text forKey:@"to"];
     [empDict3 setValue:_start3TxtField.text forKey:@"start_sal"];
     [empDict3 setValue:_last3TxtField.text forKey:@"last_sal"];
     [empDict3 setValue:@"" forKey:@"reason_for_leaving"];
@@ -1130,31 +1170,35 @@
 
     [self.navigationController pushViewController:obj animated:YES];
      */
-    [self sendtoServer:json];
+   // [self sendtoServer:json];
+    [self uploadImagesWithProgressWithId:json];
 }
 
 -(BOOL)CheckValidationForView1{
-    if(![_resumeBtn isHidden]){
-        [self showErrorAlertWithMessage:Localized(@"Upload Your Resume")];
-        return NO;
-    }
+//    if(![_resumeBtn isHidden]){
+//        [self showErrorAlertWithMessage:Localized(@"Upload Your Resume")];
+//        return NO;
+//    }
     if(_firstNametxtField.text.length==0){
         [self showErrorAlertWithMessage:Localized(@"Enter FirstName")];
         return NO;
-    }else if(_middleNametxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter MiddleName")];
-        return NO;
     }
+//    else if(_middleNametxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter MiddleName")];
+//        return NO;
+//    }
     else if(_familytxtField.text.length==0){
         [self showErrorAlertWithMessage:Localized(@"Enter FamilyName")];
         return NO;
     }else if(_dateOfBirthTxtField.text.length==0){
         [self showErrorAlertWithMessage:Localized(@"Select Date Of Birth")];
         return NO;
-    }else if(_placeOfBirthTxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter Place Of Birth")];
-        return NO;
-    }else if(_nationlaityTxtField.text.length==0){
+    }
+//    else if(_placeOfBirthTxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Place Of Birth")];
+//        return NO;
+//    }
+    else if(_nationlaityTxtField.text.length==0){
         [self showErrorAlertWithMessage:Localized(@"Select Nationality")];
         return NO;
     }else if(_residencyExpiryDateTxtfield.text.length==0){
@@ -1195,7 +1239,7 @@
         return NO;
     }
     else{
-        return  YES;
+        return  [self CheckValidationForView2];;
     }
 }
 
@@ -1244,33 +1288,37 @@
 //        return NO;
 //    }
 //
-    else if(_whenTxtfiled.text.length==0 && areyouappliedBefore){
-        [self showErrorAlertWithMessage:Localized(@"Enter you applied before")];
-        return NO;
-    }
-    else if(_nameandRelationshipTxtfield.text.length==0 && haveRelatives){
-        [self showErrorAlertWithMessage:Localized(@"Enter Name&RelationShip")];
-        return NO;
-    }else{
-        return YES;
+//    else if(_whenTxtfiled.text.length==0 && areyouappliedBefore){
+//        [self showErrorAlertWithMessage:Localized(@"Enter you applied before")];
+//        return NO;
+//    }
+//    else if(_nameandRelationshipTxtfield.text.length==0 && haveRelatives){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Name&RelationShip")];
+//        return NO;
+//    }
+    
+    else{
+        return [self CheckValidationForView3];
     }
     
 }
 -(BOOL)CheckValidationForView3{
-    if(_nameoftheSchoolTxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter Elementry SchoolName")];
-        return NO;
-    } else if(_yearsAttendedTxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter Elementry Years")];
-        return NO;
-    } else if(_dateGraduatedTxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter Elementry GraduatedDate")];
-        return NO;
-    } else if(_cartificateTxtField.text.length==0){
-        [self showErrorAlertWithMessage:Localized(@"Enter Elementry Certificate Number")];
-        return NO;
-    }
-    else if(_nameoftheSchool2TxtField.text.length==0){
+//    if(_nameoftheSchoolTxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Elementry SchoolName")];
+//        return NO;
+//    } else if(_yearsAttendedTxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Elementry Years")];
+//        return NO;
+//    } else if(_dateGraduatedTxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Elementry GraduatedDate")];
+//        return NO;
+//    } else if(_cartificateTxtField.text.length==0){
+//        [self showErrorAlertWithMessage:Localized(@"Enter Elementry Certificate Number")];
+//        return NO;
+//    }
+//    else
+        
+        if(_nameoftheSchool2TxtField.text.length==0){
         [self showErrorAlertWithMessage:Localized(@"Enter Secondary CollegeName")];
         return NO;
     } else if(_yearsAttended2TxtField.text.length==0){
@@ -1369,9 +1417,9 @@
 }
 -(BOOL)CheckValidation{
     
-    [self CheckValidationForView1];
-    [self CheckValidationForView2];
-    [self CheckValidationForView3];
+ //   [self CheckValidationForView1];
+//    [self CheckValidationForView2];
+//    [self CheckValidationForView3];
     
     //second
     
@@ -1441,7 +1489,7 @@
      }
     
     else{
-        return YES;
+        return [self CheckValidationForView1];
     }
 }
 - (void)cancelButtonClicked:(UIViewController *)secondDetailViewController {
@@ -1513,11 +1561,23 @@
     //    [self.navigationController pushViewController:vc animated:YES];
     vc.completionBlock = ^(NSMutableDictionary *area) {
         NSLog(@"%@",area);
+        _otherNationalityTxtField.text=@"";
+        if([[area valueForKey:@"id"] isEqual:@"0"]){
+            _otherNationalityTxtField.hidden=NO;
+            _otherNationalityLbl.hidden=NO;
+            _residancyTop.constant=61;
+        }else{
+            
+            _otherNationalityTxtField.hidden=YES;
+            _otherNationalityLbl.hidden=YES;
+            _residancyTop.constant=13;
+        }
         if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
             self.nationlaityTxtField.text = [area valueForKey:@"title_ar"];
         }else{
             self.nationlaityTxtField.text = [area valueForKey:@"title"];
         }
+        
     };
     
     [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
@@ -1800,6 +1860,78 @@
         [self showErrorAlertWithMessage:[error localizedDescription]];
     }];
 }
+- (void)uploadImagesWithProgressWithId:(NSString *)json {
+    
+    //http://clients.yellowsoft.in/lawyers/api/add-member-image.php
+    
+    NSString *serverURL = [NSString stringWithFormat:@"%@/%@", SERVER_URL,EMPLOYEE_REQUEST];
+    
+    //    NSDictionary *parameters = @{@"inventory_id":_InvId};
+    NSDictionary *parameters = @{@"member_id":[Utils loggedInUserIdStr],@"content":json};
+    
+    
+    //    UIImage *image = Upload_Image1;
+    UIImage *image = [UIImage imageWithCGImage:self.resumeImage.image.CGImage scale:0.25 orientation:_resumeImage.image.imageOrientation];
+  
+    
+    
+    
+    if (image == nil) {
+        [self hideHUD];
+        // [Utils showAlertWithMessage:[MCLocalization stringForKey:@"Sent Sucessfully"]];
+        // [self.navigationController popViewControllerAnimated:YES];
+        [self sendtoServer:json];
+        return;
+    }
+    
+    
+    // image = [image resizedImageToFitInSize:CGSizeMake(960, 640) scaleIfSmaller:NO];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:serverURL parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+        [formData appendPartWithFileData:UIImagePNGRepresentation(image)
+                                    name:@"file1"
+                                fileName:@"file.png"
+                                mimeType:@"image/png"];
+       
+        
+    } error:nil];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    NSURLSessionUploadTask *uploadTask;
+    
+    uploadTask = [manager uploadTaskWithStreamedRequest:request
+                                               progress:^(NSProgress * _Nonnull uploadProgress) {
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       [SVProgressHUD showProgress:uploadProgress.fractionCompleted];
+                                                   });
+                                               }
+                                      completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                                          if (error) {
+                                              NSLog(@"Failure %@", error.description);
+                                              [self hideHUD];
+                                              [Utils showErrorAlertWithMessage:[MCLocalization stringForKey:@"Error While Posting"]];
+                                              
+                                          } else {
+                                              
+                                              NSLog(@"Success %@", responseObject);
+                                              
+                                              [self hideHUD];
+                                              //                                              [self.navigationController popViewControllerAnimated:YES];
+                                              //                                              [Utils showAlertWithMessage:[MCLocalization stringForKey:@" Sent Sucessfully"]];
+                                              [self.navigationController popToRootViewControllerAnimated:YES];
+
+                                              [self showSuccessMessage:Localized(@"Sent Sucessfully")];
+
+                                          }
+                                      }];
+    
+    
+    
+    [uploadTask resume];
+}
+
 
 - (IBAction)unversitySwitchAction:(id)sender {
     if(!_universitySwitch.isOn){
@@ -1907,6 +2039,7 @@
 UIImage *Upload_Image2;
 
 - (IBAction)selectSubCategoryBtnAction:(id)sender {
+    if([SelectedPost valueForKey:@"id"]){
     AllPopViewController *vc = [[AllPopViewController alloc] initWithNibName:@"AllPopViewController" bundle:nil];
     vc.delegate=self;
     vc.From = @"SUBPOSTAPPLY";
@@ -1915,6 +2048,19 @@ UIImage *Upload_Image2;
     vc.completionBlock = ^(NSMutableDictionary *area) {
         SelectedSubPost = area;
         NSLog(@"%@",area);
+      
+        
+        _otherSubCategoryTxtFiled.text=@"";
+        if([[area valueForKey:@"id"] isEqual:@"0"]){
+            _whencanYouStartTop.constant=75;
+            _otherSubCategoryLbl.hidden=NO;
+            _otherSubCategoryTxtFiled.hidden=NO;
+        }else{
+            
+            _whencanYouStartTop.constant=20;
+            _otherSubCategoryLbl.hidden=YES;
+            _otherSubCategoryTxtFiled.hidden=YES;
+        }
         if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
             self.selectSubcategoryTxtfiled.text = [SelectedSubPost valueForKey:@"title_ar"];
         }else{
@@ -1924,5 +2070,8 @@ UIImage *Upload_Image2;
     };
     
     [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
+    }else{
+        [self showErrorAlertWithMessage:Localized(@"Please Select Post")];
+    }
 }
 @end

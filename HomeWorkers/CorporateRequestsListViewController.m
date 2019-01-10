@@ -33,33 +33,20 @@
     List =[[NSMutableArray alloc]init];
     self.tableView.allowsSelection=YES;
     // Do any additional setup after loading the view.
-    self.navigationItem.title=Localized(@"Corporate Request");
-    if([_from isEqualToString:@"10"]){
-        self.navigationItem.title=Localized(@"Home Workers Request");
-        [self makePostCallForPage:HOMEWORKERS_LIST
-                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
-                  withRequestCode:54];
-    }else  if([_from isEqualToString:@"11"]){
-        self.navigationItem.title=Localized(@"Available Home Request");
-        [self makePostCallForPage:AVAILABLEWORKES_LIST
-                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
-                  withRequestCode:55];
-    }else  if([_from isEqualToString:@"12"]){
-        self.navigationItem.title=Localized(@"Part Time Request");
-        [self makePostCallForPage:PARTTIMEWORKERS_LIST
-                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
-                  withRequestCode:56];
-    }else  if([_from isEqualToString:@"20"]){
-        self.navigationItem.title=Localized(@"Corporate Request");
-        [self makePostCallForPage:CORPORATE_LIST
-                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
-                  withRequestCode:57];
-    }else  if([_from isEqualToString:@"21"]){
-        self.navigationItem.title=Localized(@"Employee Request");
-        [self makePostCallForPage:EMPLOYEE_LIST
-                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
-                  withRequestCode:58];
-    }
+    [[UILabel appearanceWhenContainedIn:[UISegmentedControl class], nil] setNumberOfLines:0];
+    [_reqSegement setTitle:Localized(@"Home Worker Requests") forSegmentAtIndex:0];
+    [_reqSegement setTitle:Localized(@"Available Home Request") forSegmentAtIndex:1];
+    [_reqSegement setTitle:Localized(@"Part Time Request") forSegmentAtIndex:2];
+    [_reqSegement setTitle:Localized(@"Corporate Request") forSegmentAtIndex:3];
+    [_reqSegement setTitle:Localized(@"Employee Request") forSegmentAtIndex:4];
+    UIFont *font = [UIFont boldSystemFontOfSize:10.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+                                                           forKey:NSFontAttributeName];
+    [_reqSegement setTitleTextAttributes:attributes
+                                    forState:UIControlStateNormal];
+
+    self.navigationItem.title=Localized(@"Requests");
+    [self reloadAll];
     rightbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [buttonUser setImage:[UIImage imageNamed:@"leftarrow-black90"] forState:UIControlStateNormal];
     if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
@@ -150,7 +137,7 @@
     NSDictionary *dic=[List objectAtIndex:indexPath.row];
     //cell.requestNoRLbl.text=[dic valueForKey:@"id"];
     cell.requestNoRLbl.text=[dic valueForKey:@"id_str"];
-    cell.statusRLbl.text=[NSString stringWithFormat:@"%@",Localized([dic valueForKey:@"status"])];
+    cell.statusRLbl.text=[NSString stringWithFormat:@"%@",Localized([dic valueForKey:@"req_status"])];
     
     NSString *dateString = [dic valueForKey:@"date"];
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -191,7 +178,7 @@
         NSDictionary *dic=[List objectAtIndex:indexPath.row];
         //cell.requestNoRLbl.text=[dic valueForKey:@"id"];
         cell.requestNoRLbl.text=[dic valueForKey:@"id_str"];
-        cell.statusRLbl.text=[NSString stringWithFormat:@"%@",Localized([dic valueForKey:@"status"])];
+        cell.statusRLbl.text=[NSString stringWithFormat:@"%@",Localized([dic valueForKey:@"req_status"])];
         
         NSString *dateString = [dic valueForKey:@"date"];
         NSDateFormatter *format = [[NSDateFormatter alloc] init];
@@ -274,5 +261,46 @@
     // Pass the selected object to the new view controller.
 }
 */
-
+-(void)reloadAll{
+    if([_from isEqualToString:@"10"]){
+        //self.navigationItem.title=Localized(@"Home Workers Request");
+        [self makePostCallForPage:HOMEWORKERS_LIST
+                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
+                  withRequestCode:54];
+    }else  if([_from isEqualToString:@"11"]){
+        //self.navigationItem.title=Localized(@"Available Home Request");
+        [self makePostCallForPage:AVAILABLEWORKES_LIST
+                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
+                  withRequestCode:55];
+    }else  if([_from isEqualToString:@"12"]){
+        //self.navigationItem.title=Localized(@"Part Time Request");
+        [self makePostCallForPage:PARTTIMEWORKERS_LIST
+                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
+                  withRequestCode:56];
+    }else  if([_from isEqualToString:@"20"]){
+       // self.navigationItem.title=Localized(@"Corporate Request");
+        [self makePostCallForPage:CORPORATE_LIST
+                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
+                  withRequestCode:57];
+    }else  if([_from isEqualToString:@"21"]){
+        //self.navigationItem.title=Localized(@"Employee Request");
+        [self makePostCallForPage:EMPLOYEE_LIST
+                       withParams:@{@"member_id":[Utils loggedInUserIdStr]}
+                  withRequestCode:58];
+    }
+}
+- (IBAction)segmentAction:(id)sender {
+    if(_reqSegement.selectedSegmentIndex==0){
+        _from=@"10";
+    }else if(_reqSegement.selectedSegmentIndex==1){
+        _from=@"11";
+    }else if(_reqSegement.selectedSegmentIndex==2){
+        _from=@"12";
+    }else if(_reqSegement.selectedSegmentIndex==3){
+        _from=@"20";
+    }else if(_reqSegement.selectedSegmentIndex==4){
+        _from=@"21";
+    }
+    [self reloadAll];
+}
 @end

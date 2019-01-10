@@ -297,6 +297,7 @@
     SelectAreaViewController *vc = [[SelectAreaViewController alloc] initWithNibName:@"SelectAreaViewController" bundle:nil];
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
+     vc.from = @"filter";
     vc.completionBlock = ^(NSMutableDictionary *area) {
         NSLog(@"%@",area);
         if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){

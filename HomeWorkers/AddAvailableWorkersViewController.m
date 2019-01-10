@@ -297,6 +297,7 @@
     SelectAreaViewController *vc = [[SelectAreaViewController alloc] initWithNibName:@"SelectAreaViewController" bundle:nil];
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
+     vc.from = @"filter";
     vc.completionBlock = ^(NSMutableDictionary *area) {
         NSLog(@"%@",area);
         if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
@@ -406,7 +407,10 @@ UIImage *user_uiimage;
 - (void)uploadImagesWithProgressWithId:(NSString *)adId {
     
     //http://clients.yellowsoft.in/lawyers/api/add-member-image.php
-    
+    NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [currentDefaults objectForKey:@"SETTINGS"];
+    NSDictionary *Settings = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
     NSString *serverURL = [NSString stringWithFormat:@"%@/%@", SERVER_URL,ADD_AVAILABLEWORKERS];
     
     NSDictionary *parameters = @{@"member_id":[Utils loggedInUserIdStr]
@@ -420,7 +424,8 @@ UIImage *user_uiimage;
                                  @"experience":_experienceTxtfied.text,
                                  @"phone":_phoneNumberTxtField.text,
                                  @"email":_emailTxtField.text,
-                                 @"gender":[gender  isEqual: @"male"]? @"0":@"1"
+                                 @"gender":[gender  isEqual: @"male"]? @"0":@"1",
+                                 @"service_amount":[NSString stringWithFormat:@"%@",[Settings valueForKey:@"avail_amount"]]
                                  };
     
     
@@ -439,7 +444,8 @@ UIImage *user_uiimage;
                                                                     @"amount":_amountTxtField.text,
                                                                     @"experience":_experienceTxtfied.text,   @"phone":_phoneNumberTxtField.text,
                                                                     @"email":_emailTxtField.text,
-                                                                     @"gender":[gender  isEqual: @"male"]? @"0":@"1"
+                                                                     @"gender":[gender  isEqual: @"male"]? @"0":@"1",
+                                                                    @"service_amount":[NSString stringWithFormat:@"%@",[Settings valueForKey:@"avail_amount"]]
                                                                     
                                                                     } withRequestCode:200];
         //[self hideHUD];
@@ -513,7 +519,7 @@ UIImage *user_uiimage;
             PaymentViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PaymentViewController"];
             vc.amount = [NSString stringWithFormat:@"%@",[Settings valueForKey:@"avail_amount"]];
             vc.invoice_id = [NSString stringWithFormat:@"%@", bookingId];
-            
+            vc.pageName = @"availworkers";
             vc.completionBlock = ^(NSString *status) {
                 if ([status isEqualToString:@"success"]) {
                     
@@ -522,7 +528,7 @@ UIImage *user_uiimage;
                                                                                 } withRequestCode:2002];
                     [self.navigationController popViewControllerAnimated:YES];
                     //[self showSuccessMessage:Localized(@"Payment SucessFully")];
-                    [self showSuccessMessage:Localized(@"Yemnak team will get back to you within 2-3 working days")];
+                    [self showSuccessMessage:Localized(@"Yemnak team will get back to you within 12 hours")];
                 } else {
                     [Utils showErrorAlertWithMessage:Localized(@"payment_failed")];
                 }

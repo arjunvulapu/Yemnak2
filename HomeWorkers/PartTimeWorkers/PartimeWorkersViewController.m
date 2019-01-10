@@ -354,7 +354,8 @@ numberOfRowsInComponent:(NSInteger)component {
              PaymentViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PaymentViewController"];
              vc.amount = [NSString stringWithFormat:@"%@", price ];
              vc.invoice_id = [NSString stringWithFormat:@"%@", [result valueForKey:@"bookin_id"]];
-             
+                 vc.pageName = @"partworkers";
+
              vc.completionBlock = ^(NSString *status) {
                  if ([status isEqualToString:@"success"]) {
                      //[self placeOrder:json];
@@ -485,13 +486,17 @@ numberOfRowsInComponent:(NSInteger)component {
     [_morningShiftBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
     [_evngshiftBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
     [_fullShiftBtn setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateNormal];
-}
-- (IBAction)bookandPayBtnAction:(id)sender {
    
-//        if (![Utils isOnline]) {
-//            [Utils showErrorAlertWithMessage:[MCLocalization stringForKey:@"internet_error"]];
-//            return;
-//        }
+}
+- (IBAction)bookandPayBtnAction:(id)sender{
+    if([Utils loggedInUserId] != -1)
+    {
+    
+    //        if (![Utils isOnline]) {
+    //            [Utils showErrorAlertWithMessage:[MCLocalization stringForKey:@"internet_error"]];
+    //            return;
+    //        }
+    
     if(_serviceTxtField.text.length == 0){
         [self showErrorAlertWithMessage:Localized(@"Please Select Service")];
     }else if(_selectAreaTxtField.text.length == 0){
@@ -512,17 +517,21 @@ numberOfRowsInComponent:(NSInteger)component {
         [self showErrorAlertWithMessage:Localized(@"Please Enter HouseNumber")];
     }
     else{
-    [self makePostCallForPage:BOOK_PART_TIMEWORKERS withParams:@{@"member_id":[Utils loggedInUserIdStr],@"service_id":serviceId,@"type":selectedGender,
-                                                           @"area":areaId, @"day":_selectDayTxtField.text,
-                                                                 @"shift":selectedShift, @"workers":_selectQuantityOfmembers.text, @"price":price, @"address":_enterAddressTxtField.text, @"block":_blockTxtField.text, @"street":_streetTxtField.text, @"judda":_juddaTxtField.text,
-                                                                 @"house":_houseTxtFiled.text,
-                                                                 @"request":_specialReqTxtview.text
-                                                           } withRequestCode:2000];
+        [self makePostCallForPage:BOOK_PART_TIMEWORKERS withParams:@{@"member_id":[Utils loggedInUserIdStr],@"service_id":serviceId,@"type":selectedGender,
+                                                                     @"area":areaId, @"day":_selectDayTxtField.text,
+                                                                     @"shift":selectedShift, @"workers":_selectQuantityOfmembers.text, @"price":price, @"address":_enterAddressTxtField.text, @"block":_blockTxtField.text, @"street":_streetTxtField.text, @"judda":_juddaTxtField.text,
+                                                                     @"house":_houseTxtFiled.text,
+                                                                     @"request":_specialReqTxtview.text
+                                                                     } withRequestCode:2000];
     }
     
-
+    
+}else{
+    //[self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+    LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self.navigationController pushViewController:obj animated:YES];
 }
-
+}
 - (IBAction)serviceBtnAction:(id)sender {
     SelectReligionViewController *vc = [[SelectReligionViewController alloc] initWithNibName:@"SelectReligionViewController" bundle:nil];
     vc.delegate=self;

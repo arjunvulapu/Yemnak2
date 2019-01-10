@@ -16,7 +16,7 @@ pod "ZHPopupView"
 pod 'OneSignal', '>= 2.6.2', '< 3.0'
 #pod 'IDMPhotoBrowser'
 #pod 'NYTPhotoViewer'
-
+pod 'BFRImageViewer'
 end
 
 target 'OneSignalNotificationServiceExtension' do

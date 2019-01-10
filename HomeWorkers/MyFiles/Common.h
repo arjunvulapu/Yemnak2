@@ -51,11 +51,14 @@
 #define PAGE_GET_AREA @"areas.php"
 #define PAGE_GET_Quantity @"part_qty.php"
 #define BOOK_PART_TIMEWORKERS @"add-partworkers.php"
-#define PAGE_PAYMENT @"Tap.php"
+//#define PAGE_PAYMENT @"Tap.php"
+#define PAGE_PAYMENT @"pay.php"
+
 #define PAYMENT_SUCCESS @"update_part_payment.php"
 #define HOME_PAYMENT_SUCCESS @"update_homereq_payment.php"
 #define AVAILABLEWORKERS_PAYMENT_SUCCESS @"update_available_payment.php"
 #define CORPORATEREQUEST_PAYMENT_SUCCESS @"update_corporate_payment.php"
+#define HW_BOOKING_PAYMENT_SUCCESS @"update_homebooking_payment.php"
 
 #define HW_BOOKING @"home_booking.php"
 #define CONTACTUS @"contact-us.php"

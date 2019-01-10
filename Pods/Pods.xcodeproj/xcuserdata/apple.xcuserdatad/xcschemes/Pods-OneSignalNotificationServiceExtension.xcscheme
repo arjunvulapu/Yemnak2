@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4C91F21CD6F5C81D14D962A1E78C8445"
+               BlueprintIdentifier = "6AF172C30C92FCFBF93CD94B6F33D2C4"
                BlueprintName = "Pods-OneSignalNotificationServiceExtension"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libPods-OneSignalNotificationServiceExtension.a">

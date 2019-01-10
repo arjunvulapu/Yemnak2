@@ -37,7 +37,7 @@
     
     self.maleLbl.text =Localized(@"Male");
     self.femaleLbl.text=Localized(@"Female");
-    [self.resetBtn setTitle:Localized(@"Reset")];
+    [self.resetBtn setTitle:Localized(@"Reset") forState:UIControlStateNormal];
     self.nationalityTxtfiled.attributedPlaceholder =
     [[NSAttributedString alloc]
      initWithString:Localized(@"Select Nationality")
@@ -60,7 +60,11 @@
      attributes:@{NSForegroundColorAttributeName:[UIColor grayColor]}];
     self.ageTxtField.attributedPlaceholder =
     [[NSAttributedString alloc]
-     initWithString:Localized(@"Select Age")
+     initWithString:Localized(@"Select From Age")
+     attributes:@{NSForegroundColorAttributeName:[UIColor grayColor]}];
+    self.toAgeTxtField.attributedPlaceholder =
+    [[NSAttributedString alloc]
+     initWithString:Localized(@"Select To Age")
      attributes:@{NSForegroundColorAttributeName:[UIColor grayColor]}];
     self.submitBtn.layer.cornerRadius = self.submitBtn.frame.size.height/2;
     self.submitBtn.clipsToBounds = YES;
@@ -75,17 +79,7 @@
 
     [self.tableView registerClass:[AppTableViewCell class] forCellReuseIdentifier:@"cell"];
     
-//    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"close.png"] style:UIBarButtonItemStyleDone target:self action:@selector(close)];
-//    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-//        // Add a negative spacer on iOS >= 7.0
-//        UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
-//                                           initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-//                                           target:nil action:nil];
-//        negativeSpacer.width = 10;
-//        self.navItem.rightBarButtonItems = @[negativeSpacer, closeButton];
-//    } else {
-//        self.navItem.leftBarButtonItem = closeButton;
-//    }
+   
     
     self.navItem.title = Localized(@"Filter");
     [self.navigationBar setTitleTextAttributes:
@@ -104,20 +98,38 @@
     
     if([_nationality valueForKey:@"title"]){
         snationality= _nationality;
-    self.nationalityTxtfiled.text = [_nationality valueForKey:@"title"];
+        if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
+            self.nationalityTxtfiled.text = [_nationality valueForKey:@"title_ar"];
+        }else{
+            self.nationalityTxtfiled.text = [_nationality valueForKey:@"title"];
+
+        }
     }
     if([_religion valueForKey:@"title"]){
         sreligion = _religion;
-        self.religionTxtFiled.text = [_religion valueForKey:@"title"];
+        if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
+            self.religionTxtFiled.text = [_religion valueForKey:@"title_ar"];
+        }else{
+            self.religionTxtFiled.text = [_religion valueForKey:@"title"];
+            
+        }
     }
-     if([_From isEqual:@"AW"]){
-         sage = _ages;
-         self.ageTxtField.text = sage;
-
-     }
-   else  if([_age valueForKey:@"title"]){
-        sages = _age;
-        self.ageTxtField.text = [sages valueForKey:@"title"];
+//     if([_From isEqual:@"AW"]){
+//         sage = _ages;
+//         self.ageTxtField.text = sage;
+//
+//     }
+//   else  if([_age valueForKey:@"title"]){
+//        sages = _age;
+//        self.ageTxtField.text = [sages valueForKey:@"title"];
+//    }
+    if(_ages){
+    sage = _ages;
+    self.ageTxtField.text = sage;
+    }
+    if(_toAges){
+        _toAges = _toAges;
+        self.toAgeTxtField.text = _toAges;
     }
     if([_gender  isEqual: @"1"]){
         [self.maleBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
@@ -199,10 +211,17 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     SelectAreaViewController *vc = [[SelectAreaViewController alloc] initWithNibName:@"SelectAreaViewController" bundle:nil];
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
+    vc.from = @"filter";
     vc.completionBlock = ^(NSMutableDictionary *area) {
         NSLog(@"%@",area);
         snationality= area;
-        self.nationalityTxtfiled.text = [area valueForKey:@"title"];
+//        self.nationalityTxtfiled.text = [area valueForKey:@"title"];
+        if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
+            self.nationalityTxtfiled.text = [area valueForKey:@"title_ar"];
+        }else{
+            self.nationalityTxtfiled.text = [area valueForKey:@"title"];
+            
+        }
     };
     
     [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
@@ -212,6 +231,7 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     SelectReligionViewController *vc = [[SelectReligionViewController alloc] initWithNibName:@"SelectReligionViewController" bundle:nil];
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
+     vc.from = @"filter";
     vc.completionBlock = ^(NSMutableDictionary *area) {
         NSLog(@"%@",area);
         sreligion = area;
@@ -235,7 +255,8 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     sreligion = [[NSDictionary alloc] init];
     _ageTxtField.text=@"";
     sages = [[NSDictionary alloc] init];
-    
+    _toAgeTxtField.text=@"";
+
 }
 - (IBAction)submitBtnAction:(id)sender {
     NSLog(@"%@",self.nationalityTxtfiled.text);
@@ -265,6 +286,17 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     }else{
         [dict setObject:@"" forKey:@"age"];
     }
+    if(_toAgeTxtField.text.length>0){
+        if([_From  isEqual: @"AW"]){
+            [dict setObject:_toAges forKey:@"toage"];
+        }else{
+            [dict setObject:_toAges forKey:@"toage"];
+            
+            //[dict setObject:[sages valueForKey:@"id"] forKey:@"age"];
+        }
+    }else{
+        [dict setObject:@"" forKey:@"toage"];
+    }
    // [dict setObject:_fromSal.text forKey:@"MinSal"];
     // [dict setObject:_toSAl.text forKey:@"MaxSal"];
     //[dict setObject:_ageTxtField.text forKey:@"age"];
@@ -286,22 +318,6 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     [self.delegate cancelButtonClicked:self];
 }
 - (IBAction)selectAgeBtnAction:(id)sender {
-    if([_From  isEqual: @"AW"]){
-    PriceViewController *vc = [[PriceViewController alloc] initWithNibName:@"PriceViewController" bundle:nil];
-    vc.delegate=self;
-    //    [self.navigationController pushViewController:vc animated:YES];
-    vc.title = @"SELECT AGE";
-    vc.minimum=@"55";
-    vc.maximum=@"0";
-    vc.devider=@"1";
-    vc.completionBlock = ^(NSString *area) {
-        NSLog(@"%@",area);
-        _ages = area;
-        _ageTxtField.text=[NSString stringWithFormat:@"%@",area];
-    };
-
-    [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
-    }else{
     MembersViewController *vc = [[MembersViewController alloc] initWithNibName:@"MembersViewController" bundle:nil];
     vc.delegate=self;
     //    [self.navigationController pushViewController:vc animated:YES];
@@ -315,15 +331,15 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
         }
     };
         vc.completionBlock3 = ^(NSString *sage ) {
-            sage=sage;
+            _ages=sage;
             if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
-                self.ageTxtField.text = [NSString stringWithFormat:@"%@",sage];
+                self.ageTxtField.text = [NSString stringWithFormat:@"%@",_ages];
             }else{
-                self.ageTxtField.text = [NSString stringWithFormat:@"%@",sage];
+                self.ageTxtField.text = [NSString stringWithFormat:@"%@",_ages];
             }
         };
     [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
-    }
+    
 }
 - (IBAction)amountBtnAction:(id)sender {
     PriceViewController *vc = [[PriceViewController alloc] initWithNibName:@"PriceViewController" bundle:nil];
@@ -396,4 +412,28 @@ NSMutableDictionary *str=[self.areas objectAtIndex:indexPath.row];
     }
 }
 
+- (IBAction)toAgeBtnAction:(id)sender {
+        MembersViewController *vc = [[MembersViewController alloc] initWithNibName:@"MembersViewController" bundle:nil];
+        vc.delegate=self;
+        //    [self.navigationController pushViewController:vc animated:YES];
+        vc.from = @"ages";
+        vc.completionBlock2 = ^(NSDictionary *sage ) {
+            sages=sage;
+            if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
+                self.ageTxtField.text = [NSString stringWithFormat:@"%@",[sages valueForKey:@"title_ar"]];
+            }else{
+                self.ageTxtField.text = [NSString stringWithFormat:@"%@",[sages valueForKey:@"title"]];
+            }
+        };
+        vc.completionBlock3 = ^(NSString *sage ) {
+            _toAges = sage;
+            if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
+                self.toAgeTxtField.text = [NSString stringWithFormat:@"%@",sage];
+            }else{
+                self.toAgeTxtField.text = [NSString stringWithFormat:@"%@",sage];
+            }
+        };
+        [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
+    
+}
 @end

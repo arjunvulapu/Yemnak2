@@ -13,6 +13,7 @@
 @interface PaymentViewController : BaseViewController <UIWebViewDelegate>
 @property (nonatomic, strong) NSString *amount;
 @property (nonatomic, strong) NSString *invoice_id;
+@property (nonatomic, strong) NSString *pageName;
 
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

@@ -23,8 +23,8 @@
    
     //http://mamacgroup.com/gifts/Tap-app.php
     NSString *url = [NSString stringWithFormat:@"%@/%@",SERVER_URL, PAGE_PAYMENT];
-    NSString *finalUrl = [NSString stringWithFormat:@"%@?member_id=%@&amount=%@&order_id=%@",
-                          url, [Utils loggedInUserIdStr], self.amount,_invoice_id];
+    NSString *finalUrl = [NSString stringWithFormat:@"%@?member_id=%@&amount=%@&order_id=%@&device=%@&page=%@",
+                          url, [Utils loggedInUserIdStr], self.amount,_invoice_id,@"1",self.pageName];
     NSLog(@"final url: %@", finalUrl);
     self.webView.delegate = self;
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:finalUrl]]];
@@ -78,7 +78,7 @@
     BOOL result = YES;
     
     NSURL *url = [request URL];
-    //if ([[url host] containsString:@"cavaratmall.com"]) {
+    NSLog(@"%@",url);
         if ([[url query] containsString:@"result=failed"]) {
             [self.navigationController popViewControllerAnimated:YES];
             if (self.completionBlock) {
@@ -94,7 +94,7 @@
             }
             return YES;
         }
-    //}
+  
     
     return result;
 }

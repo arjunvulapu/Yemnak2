@@ -15,6 +15,8 @@
 #import <MessageUI/MessageUI.h>
 #import "PaymentViewController.h"
 #import "MWPhotoBrowser.h"
+#import "LoginViewController.h"
+#import "BFRImageViewController.h"
 @interface HworkersDetailViewController ()<MFMailComposeViewControllerDelegate,MWPhotoBrowserDelegate>
 {
     UIButton *rightbutton;
@@ -45,7 +47,7 @@
     self.paymentbackgroundView.clipsToBounds = YES;
     self.pImage.layer.cornerRadius = 10;
     self.pImage.clipsToBounds = YES;
-    [self.pImage setImageWithURL:[self.workerDetails valueForKey:@"image"]  usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.pImage setImageWithURL:[self.workerDetails valueForKey:@"image2"]  usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.title =[NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"applicant_id"]];
     self.applicationId.text = [NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"applicant_id"]];
     self.age.text = [NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"age"]];
@@ -170,6 +172,19 @@
         self.completionBlock();
         [self.navigationController popViewControllerAnimated:YES];
         [self showSuccessMessage:Localized(@"Payment SucessFully")];
+    } else if(reqeustCode==200){
+        
+        if ([[result valueForKey:@"status"] isEqualToString:@"Failed"]) {
+            NSString *str=[result valueForKey:@"message"];
+            [self showErrorAlertWithMessage:Localized(str)];
+            
+        } else {
+            [self NeedToPay:[NSString stringWithFormat:@"%@", [result valueForKey:@"id"]]];
+            // [Utils loginUserWithMemberId:[result valueForKey:@"member_id"] withType:@"User"];
+            
+            // [self.navigationController popViewControllerAnimated:YES];
+            
+        }
     }
     else{
         [self.navigationController popViewControllerAnimated:YES];
@@ -273,50 +288,63 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
     //Add an alert in case of failure
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+-(void)NeedToPay:(NSString *)bookingId{
+    
+    
+    
+    PaymentViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PaymentViewController"];
+    vc.amount = [self.workerDetails valueForKey:@"part_amount"];
+    vc.pageName = @"home_work_bookings";
+    vc.invoice_id = [NSString stringWithFormat:@"%@", bookingId];
+    
+    vc.completionBlock = ^(NSString *status) {
+        if ([status isEqualToString:@"success"]) {
+            //[self placeOrder:json];
+            
+            
+            // [_paymentScucessView setHidden:false];
+            // to move to home page
+            //                        self.tabBarController.selectedIndex=0;
+            
+            //                        HistoryOrderViewController *newView = [self.storyboard instantiateViewControllerWithIdentifier:@"HistoryOrderViewController"];
+            //                        newView.orderId =invoiceId;
+            //                        newView.from=@"cart";
+            //                        [self.navigationController pushViewController:newView animated:YES];
+            [self makePostCallForPage:HW_BOOKING_PAYMENT_SUCCESS withParams:@{@"member_id":[Utils loggedInUserIdStr],
+                                                              @"req_id":bookingId
+                                                              
+                                                              } withRequestCode:2002];
+            
+            
+            
+        } else {
+            [Utils showErrorAlertWithMessage:Localized(@"payment_failed")];
+        }
+    };
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    
+    
+}
 - (IBAction)requestPayBtnAction:(id)sender {
      if([Utils loggedInUserId] != -1)
     {
         
-    
-        
-        PaymentViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PaymentViewController"];
-        vc.amount = [self.workerDetails valueForKey:@"part_amount"];
-        //vc.invoice_id = [NSString stringWithFormat:@"%@", [result valueForKey:@"bookin_id"]];
-        
-        vc.completionBlock = ^(NSString *status) {
-            if ([status isEqualToString:@"success"]) {
-                //[self placeOrder:json];
-                
-                
-                // [_paymentScucessView setHidden:false];
-                // to move to home page
-                //                        self.tabBarController.selectedIndex=0;
-                
-                //                        HistoryOrderViewController *newView = [self.storyboard instantiateViewControllerWithIdentifier:@"HistoryOrderViewController"];
-                //                        newView.orderId =invoiceId;
-                //                        newView.from=@"cart";
-                //                        [self.navigationController pushViewController:newView animated:YES];
-                [self makePostCallForPage:HW_BOOKING withParams:@{@"member_id":[Utils loggedInUserIdStr],
-                                                                       @"worker_id":[self.workerDetails valueForKey:@"id"]
-                                                                  
-                                                                       } withRequestCode:2002];
-               
-
-                
-            } else {
-                [Utils showErrorAlertWithMessage:Localized(@"payment_failed")];
-            }
-        };
-        
-        [self.navigationController pushViewController:vc animated:YES];
-        
-        
+        [self makePostCallForPage:HW_BOOKING withParams:@{@"member_id":[Utils loggedInUserIdStr],
+                                                          @"worker_id":[self.workerDetails valueForKey:@"id"]
+                                                          
+                                                          } withRequestCode:200];
         
     }else{
-        [self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+        //[self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+        LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        [self.navigationController pushViewController:obj animated:YES];
     }
 }
 - (IBAction)addcommnetsAction:(id)sender {
+    if([Utils loggedInUserId] != -1)
+    {
     RateOrderViewController *vc = [[RateOrderViewController alloc] initWithNibName:@"RateOrderViewController" bundle:nil];
     vc.delegate = self;
     vc.orderId = [self.workerDetails valueForKey:@"id"];
@@ -325,12 +353,23 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
         [self makePostCallForPage:WORKER_COMMENTS withParams:@{@"worker_id":[_workerDetails valueForKey:@"id"]} withRequestCode:101];
     };
     [self presentPopupViewController:vc animationType:MJPopupViewAnimationSlideBottomTop dismissed:nil];
+    }else{
+        //[self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+        LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        [self.navigationController pushViewController:obj animated:YES];
+    }
+        
 }
 - (void)cancelButtonClicked:(UIViewController *)secondDetailViewController {
     [self dismissPopupViewControllerWithanimationType:MJPopupViewAnimationSlideTopBottom];
 }
 - (IBAction)imageViewerAction:(id)sender {
-    [self showImage:[_workerDetails valueForKey:@"image2"]];
+    //[self showImage:[_workerDetails valueForKey:@"image2"]];
+    BFRImageViewController *imageVC = [[BFRImageViewController alloc] initWithImageSource:@[[_workerDetails valueForKey:@"image2"]]];
+    [imageVC setModalPresentationStyle:UIModalPresentationCustom];
+    [imageVC setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:imageVC animated:YES completion:nil];
+
 }
 #pragma mark - MWPhotoBrowserDelegate
 -(void)showImage:(NSString *)imageurl{

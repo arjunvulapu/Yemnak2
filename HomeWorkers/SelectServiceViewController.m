@@ -24,7 +24,7 @@
     self.areas = [[NSMutableArray alloc] init];
     self.arr = [[NSMutableArray alloc] init];
     [self.tableView registerClass:[AppTableViewCell class] forCellReuseIdentifier:@"cell"];
-    _doneBtn.title =Localized(@"Done");
+    [_doneBtn setTitle:Localized(@"Done") forState:UIControlStateNormal];
    
     
 //    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"close.png"] style:UIBarButtonItemStyleDone target:self action:@selector(close)];

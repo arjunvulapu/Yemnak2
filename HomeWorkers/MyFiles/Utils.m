@@ -227,6 +227,7 @@
                                                    delegate:nil
                                           cancelButtonTitle:[MCLocalization stringForKey:@"ok"]
                                           otherButtonTitles:nil];
+    
     [alert show];
 }
 

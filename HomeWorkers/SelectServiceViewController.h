@@ -19,5 +19,5 @@
 @property(nonatomic,strong)NSMutableArray *areasList;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *closeBtn;
 - (IBAction)close:(id)sender;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *doneBtn;
+@property (weak, nonatomic) IBOutlet UIButton *doneBtn;
 @end

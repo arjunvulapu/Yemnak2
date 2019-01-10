@@ -90,6 +90,17 @@
 @property (weak, nonatomic) IBOutlet UIButton *maleBtn;
 - (IBAction)femaleAction:(id)sender;
 - (IBAction)maleAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *bothGenderLbl;
+@property (weak, nonatomic) IBOutlet UIButton *bothGenderBtn;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *residancyTop;
+@property (weak, nonatomic) IBOutlet JVFloatLabeledTextField *otherNationalityTxtField;
+@property (weak, nonatomic) IBOutlet UILabel *otherNationalityLbl;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *whencanYouStartTop;
+@property (weak, nonatomic) IBOutlet JVFloatLabeledTextField *otherSubCategoryTxtFiled;
+@property (weak, nonatomic) IBOutlet UILabel *otherSubCategoryLbl;
+
+
 
 // 2nd view
 @property (weak, nonatomic) IBOutlet UILabel *currentEmployeeLbl;

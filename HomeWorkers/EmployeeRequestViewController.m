@@ -16,6 +16,7 @@
 #import "MembersViewController.h"
 #import "SelectServiceViewController.h"
 #import "PaymentViewController.h"
+#import "LoginViewController.h"
 @interface EmployeeRequestViewController ()<PopViewControllerDelegate>
 {
      int i;
@@ -48,6 +49,7 @@
     [_view2 setHidden:YES];
     [_view3 setHidden:YES];
     i =1;
+    
     _view1.alpha=1.0;
     _view2.alpha=1.0;
     _view3.alpha=1.0;
@@ -125,6 +127,16 @@
     if([_from  isEqual: @"List"]){
         [self stopUserintereaction];
     }
+    [self showFirstView];
+    
+}
+-(void)showFirstView{
+    _scrollView.contentSize= CGSizeMake(_scrollView.frame.size.width, _view1.frame.size.height);
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
+    [self.scrollView setNeedsDisplay];
+}
+-(void)viewWillAppear:(BOOL)animated{
+    
 }
 -(void)stopUserintereaction{
     NSLog(@"%@",_details);
@@ -209,15 +221,18 @@
         [_view2 setHidden:YES];
         [_view3 setHidden:YES];
         i =1;
+        _scrollView.contentSize= CGSizeMake(_scrollView.frame.size.width, _view1.frame.size.height);
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+        [self.scrollView setNeedsDisplay];
     }else if(i == 3){
         [self AddyourReqiurementAction:nil];
     }
 
 }
 -(void)viewThrid{
-    [super viewDidLoad];
+   // [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.title=Localized(@"Corporate Form Request");
+    self.navigationItem.title=Localized(@"Corporate Request");
     self.tradeLicensetxtField.text=@"";
     self.tradeLicensetxtField.attributedPlaceholder =
     [[NSAttributedString alloc]
@@ -243,6 +258,12 @@
     [[NSAttributedString alloc]
      initWithString:Localized(@"Email Address")
      attributes:@{NSForegroundColorAttributeName:placeholderColor}];
+    
+    
+    self.addCommentTxtView.text = @"";
+    self.addCommentTxtView.placeholder = Localized(@"Write comment here");
+    self.addCommentTxtView.placeholderTextColor = placeholderColor;
+    
     self.serviceChargeLbl.text = Localized(@"Service Charges");
     NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [currentDefaults objectForKey:@"SETTINGS"];
@@ -309,7 +330,8 @@
     self.genderLbl.text=Localized(@"Gender");
     self.maleLbl.text =Localized(@"Male");
     self.femaleLbl.text=Localized(@"Female");
-    
+    self.bothGenderLbl.text=Localized(@"Both");
+
     self.localityLbl.text=Localized(@"Locality");
     self.localLbl.text =Localized(@"Local");
     self.overseasLbl.text=Localized(@"Overseas");
@@ -327,6 +349,11 @@
     self.selectCategoriesTxtfield.attributedPlaceholder =
     [[NSAttributedString alloc]
      initWithString:Localized(@"Select Categories")
+     attributes:@{NSForegroundColorAttributeName:placeholderColor}];
+    self.otherSubcategoryTxtField.text=@"";
+    self.otherSubcategoryTxtField.attributedPlaceholder =
+    [[NSAttributedString alloc]
+     initWithString:Localized(@"Enter Other Subcategory")
      attributes:@{NSForegroundColorAttributeName:placeholderColor}];
     self.numberOfWorkersTxtfield.text=@"";
     self.numberOfWorkersTxtfield.attributedPlaceholder =
@@ -350,12 +377,18 @@
     self.uploadDocBtn.layer.borderColor = [UIColor whiteColor].CGColor;
     self.uploadDocBtn.layer.borderWidth = 2;
      _disclimarTxtView.text=[NSString stringWithFormat:@"%@:%@",Localized(@"Disclaimer"),Localized(@"Any candidates from International Group of Aamina that has been rejected for any reasons and found that is working under within six-month period of time,International group of Aamina has the right to collect the SERVICE FEE per the applicants as agreed to our local agreement.") ];
+    _numberWorkersTop.constant=20;
+    _otherSubcatLbl.hidden=YES;
+    _otherSubcategoryTxtField.hidden=YES;
 }
 - (IBAction)AddyourReqiurementAction:(id)sender {
     [_view1 setHidden:YES];
     [_view2 setHidden:NO];
     [_view3 setHidden:YES];
       i=2;
+    _scrollView.contentSize= CGSizeMake(_scrollView.frame.size.width, _view2.frame.size.height);
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
+    [self.scrollView setNeedsDisplay];
 }
 
 - (IBAction)categoriesAction:(id)sender {
@@ -393,6 +426,9 @@
  [_view2 setHidden:YES];
     [_view3 setHidden:NO];
     i= 3;
+    _scrollView.contentSize= CGSizeMake(_scrollView.frame.size.width, _view3.frame.size.height);
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
+    [self.scrollView setNeedsDisplay];
 }
 - (void)cancelButtonClicked:(UIViewController *)secondDetailViewController {
     [self dismissPopupViewControllerWithanimationType:MJPopupViewAnimationSlideTopBottom];
@@ -416,12 +452,23 @@
     [self imageSelection:sender];
 }
 - (IBAction)submitBtnAction:(id)sender {
+    if([Utils loggedInUserId] != -1)
+    {
     [self loadData];
+        }else{
+            //[self showErrorAlertWithMessage:Localized(@"Please Login To ")];
+            LoginViewController *obj = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+            [self.navigationController pushViewController:obj animated:YES];
+        }
 }
 -(void)loadData{
     if([self CheckValidation]){
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
-   
+        NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
+        NSData *data2 = [currentDefaults objectForKey:@"SETTINGS"];
+        NSDictionary *Settings = [NSKeyedUnarchiver unarchiveObjectWithData:data2];
+    [dict setValue:[NSString stringWithFormat:@"%@",[Settings valueForKey:@"corporate_req_amount"]] forKey:@"service_amount"];
+
     [dict setValue:_companyNameTxtfield.text forKey:@"company_name"];
     [dict setValue:_phoneNumberTxtField.text forKey:@"phone_number"];
     [dict setValue:_addressTxtField.text forKey:@"address"];
@@ -430,6 +477,7 @@
     
     [dict setValue:[selectedPost valueForKey:@"id"] forKey:@"selected_categories"];
         [dict setValue:[selectedSubPost valueForKey:@"id"] forKey:@"selected_subcategories"];
+        [dict setValue:_otherSubcategoryTxtField.text forKey:@"other_selected_subcategories"];
 
     [dict setValue:_numberOfWorkersTxtfield.text forKey:@"number_of_workers"];
     [dict setValue:_salaryTxtfield.text forKey:@"salary"];
@@ -438,8 +486,10 @@
     
     [dict setValue:_emailAddresstxtFiedl.text forKey:@"email_address"];
 //    [dict setValue:_contactNumberTxtField.text forKey:@"contact_number"];
-//    [dict setValue:_companyAddressTxtField.text forKey:@"company_address"];
-    [dict setValue: [gender  isEqual: @"male"]? @"0":@"1" forKey:@"gender"];
+    [dict setValue:ageIds forKey:@"age"];
+            [dict setValue:_addCommentTxtView.text forKey:@"comment"];
+
+    [dict setValue: [gender  isEqual: @"male"]? @"0":[gender  isEqual: @"female"]? @"1":@"2" forKey:@"gender"];
         [dict setValue:locality forKey:@"locality"];
         [dict setValue:@"iPhone" forKey:@"device_type"];
 
@@ -643,7 +693,6 @@ UIImage *Upload_Image1;
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
     NSURLSessionUploadTask *uploadTask;
-    
     uploadTask = [manager uploadTaskWithStreamedRequest:request
                                                progress:^(NSProgress * _Nonnull uploadProgress) {
                                                    dispatch_async(dispatch_get_main_queue(), ^{
@@ -682,7 +731,7 @@ UIImage *Upload_Image1;
     PaymentViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"PaymentViewController"];
     vc.amount = [NSString stringWithFormat:@"%@",[Settings valueForKey:@"corporate_req_amount"]];
     vc.invoice_id = [NSString stringWithFormat:@"%@", bookingId];
-    
+    vc.pageName = @"corporates";
     vc.completionBlock = ^(NSString *status) {
         if ([status isEqualToString:@"success"]) {
             
@@ -707,13 +756,16 @@ UIImage *Upload_Image1;
     gender = @"male";
     [_maleBtn setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateNormal];
     [_femaleBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
-    
+    [_bothGenderBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+
 }
 
 - (IBAction)femaleAction:(id)sender {
     gender = @"female";
     [_femaleBtn setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateNormal];
     [_maleBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+    [_bothGenderBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+
 }
 - (IBAction)locationBtnAction:(id)sender {
     locality = @"local";
@@ -789,6 +841,17 @@ UIImage *Upload_Image1;
     vc.completionBlock = ^(NSMutableDictionary *area) {
         selectedSubPost = area;
         NSLog(@"%@",area);
+        _otherSubcategoryTxtField.text=@"";
+        if([[area valueForKey:@"id"] isEqual:@"0"]){
+            _numberWorkersTop.constant=75;
+            _otherSubcatLbl.hidden=NO;
+            _otherSubcategoryTxtField.hidden=NO;
+        }else{
+            
+            _numberWorkersTop.constant=20;
+            _otherSubcatLbl.hidden=YES;
+            _otherSubcategoryTxtField.hidden=YES;
+        }
         if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
             self.subCategoryTxtField.text = [selectedSubPost valueForKey:@"title_ar"];
         }else{
@@ -802,5 +865,11 @@ UIImage *Upload_Image1;
         [self showErrorAlertWithMessage:Localized(@"Select Category")];
     }
 
+}
+- (IBAction)bothGenderBtnAction:(id)sender {
+    gender = @"both";
+    [_maleBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+    [_femaleBtn setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+    [_bothGenderBtn setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateNormal];
 }
 @end

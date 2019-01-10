@@ -73,7 +73,7 @@
         self.navItem.title = Localized(@"SELECT AGE");
         
         NSMutableArray *results = [[NSMutableArray alloc]init];
-        for (int i = 0; i <= 55;i++)
+        for (int i = 18; i <= 50;i++)
         {
             
             [results addObject:[NSString stringWithFormat:@"%d",i]];

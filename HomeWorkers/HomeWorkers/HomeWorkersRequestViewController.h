@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import <JVFloatLabeledTextField/JVFloatLabeledTextField.h>
+
 @interface HomeWorkersRequestViewController : BaseViewController
 @property (weak, nonatomic) IBOutlet UILabel *genderlbl;
 @property (weak, nonatomic) IBOutlet UILabel *maleLbl;
@@ -51,6 +53,9 @@
 @property (strong, nonatomic)  NSString *from;
 
 @property (strong, nonatomic)  NSMutableDictionary *details;
-
-
+@property (weak, nonatomic) IBOutlet UIImageView *visaImage;
+@property (weak, nonatomic) IBOutlet JVFloatLabeledTextField *visaQuota;
+- (IBAction)visaAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *visaBtn;
+@property (weak, nonatomic) IBOutlet UIButton *visaMainBtn;
 @end

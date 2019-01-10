@@ -41,7 +41,7 @@
 //    [self.viewRating addSubview:self.bar];
     
     self.bar = [[RatingBar alloc] initWithFrame:CGRectMake(50, 50, 180, 30)];
-    self.bar.backgroundColor= [UIColor blackColor];
+    self.bar.backgroundColor= [UIColor clearColor];
     [self.view addSubview:self.bar];
 }
 
@@ -55,6 +55,7 @@
 }
 
 - (IBAction)submit:(id)sender {
+   
     [self makePostCallForPage:PAGE_ADD_RATING withParams:@{@"worker_id":self.orderId,@"member_id":[Utils loggedInUserIdStr],@"rating":[NSString stringWithFormat:@"%ld", self.bar.starNumber], @"comments":self.textInfo.text} withRequestCode:1];
 }
 - (IBAction)close:(id)sender {

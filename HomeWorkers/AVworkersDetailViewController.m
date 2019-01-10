@@ -58,16 +58,18 @@
     [self addtolayerTO:_callBtn];
     [self addtolayerTO:_emailbtn];
     
-    self.exptextView.text = [NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"experience"] ];
    // self.exptextView.textAlignment = NSTextAlignmentJustified;
 
     rightbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [buttonUser setImage:[UIImage imageNamed:@"leftarrow-black90"] forState:UIControlStateNormal];
     if([[Utils getLanguage] isEqual:KEY_LANGUAGE_AR]){
         [rightbutton setImage:[UIImage imageNamed:@"right-arrow"] forState:UIControlStateNormal];
-        
+        self.exptextView.text = [NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"experience_ar"] ];
+
     }else{
         [rightbutton setImage:[UIImage imageNamed:@"left-arrow"] forState:UIControlStateNormal];
+        self.exptextView.text = [NSString stringWithFormat:@"%@", [self.workerDetails valueForKey:@"experience"] ];
+
     }
     rightbutton.frame = CGRectMake(0, 0, 30, 30);
     [rightbutton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
@@ -171,7 +173,10 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
         NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [currentDefaults objectForKey:@"SETTINGS"];
         NSMutableDictionary *Settings = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        NSString *email = [Settings  valueForKey:@"email"];        [composeViewController setToRecipients:@[email]];
+        NSString *email =[[self.workerDetails valueForKey:@"member"] valueForKey:@"email"];
+
+       // NSString *email = [Settings  valueForKey:@"email"];
+        [composeViewController setToRecipients:@[email]];
         [composeViewController setSubject:@""];
         [self presentViewController:composeViewController animated:YES completion:nil];
     }
@@ -182,7 +187,8 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath
     NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
     NSData *data = [currentDefaults objectForKey:@"SETTINGS"];
     NSMutableDictionary *Settings = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    NSString *phNo = [Settings  valueForKey:@"phone"];
+    //NSString *phNo = [Settings  valueForKey:@"phone"];
+    NSString *phNo =[[self.workerDetails valueForKey:@"member"] valueForKey:@"phone"];
     NSURL *phoneUrl = [NSURL URLWithString:[NSString  stringWithFormat:@"telprompt:%@",phNo]];
     
     if ([[UIApplication sharedApplication] canOpenURL:phoneUrl]) {

@@ -12,6 +12,7 @@
 @interface SelectAreaViewController : BaseViewController
 @property (nonnull) id<PopViewControllerDelegate> delegate;
 @property (nonatomic) NSString *restId;
+@property (nonatomic) NSString *from;
 @property (nonatomic, copy) void (^completionBlock)(NSMutableDictionary *area);
 @property(nonatomic,strong)NSMutableArray *areasList;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *closeBtn;
